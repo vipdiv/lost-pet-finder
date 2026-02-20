@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-            "build": "next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-            "postinstall": "prisma generate",
+    "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force"
@@ -17,8 +17,6 @@
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
-            "@libsql/client": "^0.6.0",
-        "@prisma/adapter-libsql": "^5.22.0",
     "cloudinary": "^2.5.1",
     "next": "^14.2.18",
     "react": "^18.3.1",
