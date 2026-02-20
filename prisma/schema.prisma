@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Pet {
+  id              String     @id @default(uuid())
+  status          String     @default("UNKNOWN") // MISSING, REGULAR, UNKNOWN, REUNITED
+  name            String?
+  species         String     // DOG, CAT, OTHER
+  description     String?
+  neighborhood    String     @default("Houston — Lawndale Park")
+  primaryPhotoUrl String
+  contactInfo     String?
+  hidden          Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  sightings Sighting[]
+  comments  Comment[]
+  reunion   Reunion?
+}
+
+model Sighting {
+  id                String    @id @default(uuid())
+  petId             String?
+  species           String    // DOG, CAT, OTHER
+  photoUrl          String
+  locationText      String
+  seenAt            DateTime  @default(now())
+  notes             String?
+  waitMinutes       Int?
+  hidden            Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  createdByViewerId String
+
+  pet      Pet?      @relation(fields: [petId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id                String   @id @default(uuid())
+  petId             String
+  sightingId        String?
+  body              String
+  hidden            Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  createdByViewerId String
+
+  pet      Pet       @relation(fields: [petId], references: [id])
+  sighting Sighting? @relation(fields: [sightingId], references: [id])
+}
+
+model Report {
+  id                String   @id @default(uuid())
+  targetType        String   // PET, SIGHTING, COMMENT
+  targetId          String
+  reason            String
+  createdAt         DateTime @default(now())
+  createdByViewerId String
+}
+
+model Vote {
+  id                String   @id @default(uuid())
+  targetType        String   // SIGHTING, COMMENT
+  targetId          String
+  voteType          String   // UP, DOWN
+  createdAt         DateTime @default(now())
+  createdByViewerId String
+
+  @@unique([targetId, createdByViewerId])
+}
+
+model Reunion {
+  id                  String   @id @default(uuid())
+  petId               String   @unique
+  confirmedAt         DateTime @default(now())
+  confirmedByViewerId String
+  note                String?
+
+  pet Pet @relation(fields: [petId], references: [id])
+}
+
+model GamificationEvent {
+  id        String   @id @default(uuid())
+  viewerId  String
+  type      String   // POST_SIGHTING, POST_COMMENT, UPVOTE_HELPFUL, LINK_SIGHTING_TO_MISSING, CONFIRMED_REUNION, REPORT_SPAM_OR_ABUSE
+  points    Int
+  createdAt DateTime @default(now())
+}
+
+model ViewerProfile {
+  id           String   @id @default(uuid())
+  viewerId     String   @unique
+  displayName  String?
+  stewardLevel String   @default("VISITOR") // VISITOR, NEIGHBOR, PARK_WATCHER, STEWARD, BRIDGE_GUARDIAN
+  points       Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Badge {
+  id       String   @id @default(uuid())
+  viewerId String
+  type     String   // QUICK_RESPONSE, REUNION_HELPER, STEADY_NEIGHBOR, LOCAL_KNOWLEDGE, EARLY_WALKER, EVENING_PATROL
+  earnedAt DateTime @default(now())
+
+  @@unique([viewerId, type])
+}
+
+model RateLimit {
+  id        String   @id @default(uuid())
+  key       String
+  count     Int      @default(1)
+  windowStart DateTime @default(now())
+
+  @@unique([key])
+}
