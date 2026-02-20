@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-park-cream text-park-brown font-sans;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-park-green-dark;
+  }
+}
+
+@layer components {
+  .card-frame {
+    @apply bg-white border-2 border-park-sepia/30 rounded-lg shadow-sm;
+    box-shadow:
+      0 1px 3px rgba(139, 115, 85, 0.1),
+      inset 0 0 0 1px rgba(139, 115, 85, 0.05);
+  }
+
+  .card-frame:hover {
+    @apply border-park-sepia/50 shadow-md;
+  }
+
+  .stamp {
+    @apply inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-sm border-2 transform -rotate-2;
+  }
+
+  .stamp-missing {
+    @apply stamp text-park-red border-park-red bg-red-50;
+  }
+
+  .stamp-regular {
+    @apply stamp text-park-green border-park-green bg-green-50;
+  }
+
+  .stamp-sighting {
+    @apply stamp text-park-gold border-park-gold bg-amber-50 rotate-1;
+  }
+
+  .stamp-reunited {
+    @apply stamp text-park-green-light border-park-green-light bg-green-100 rotate-2;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-park-green text-white font-semibold rounded-lg
+           hover:bg-park-green-light transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-park-green focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-white text-park-green border-2 border-park-green font-semibold rounded-lg
+           hover:bg-park-green hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-park-green focus:ring-offset-2;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 text-park-sepia hover:text-park-green hover:bg-park-paper
+           rounded-lg transition-colors duration-200;
+  }
+
+  .form-input {
+    @apply w-full px-4 py-2.5 border-2 border-park-sepia/30 rounded-lg bg-white
+           focus:border-park-green focus:ring-1 focus:ring-park-green
+           placeholder:text-park-sepia/50;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-park-brown mb-1.5;
+  }
+}
